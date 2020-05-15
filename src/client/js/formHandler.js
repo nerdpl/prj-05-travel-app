@@ -1,28 +1,37 @@
 function handleSubmit(event) {
     event.preventDefault()
     // check what text was put into the form field
-    let userUrl = document.getElementById('name').value;
-    // send the url to server and get evaluation
-    postData('/sentiment', { link: userUrl })
+    let userLocation = document.getElementById('inputLocation').value
+    let userDate = document.getElementById('inputDate').value
+    console.log(userDate, userLocation)
+    pixData(pixURL1, userLocation, pixURL2)
 }
  
-const postData = async (url = '', data = {})=> {
-    // send the url
-    const response = await fetch(url, {
-        method: 'POST', 
-        credentials: 'same-origin',
-        headers: {'Content-Type': 'application/json',},
-        body: JSON.stringify(data) 
-    })
+/* Get image from PIXABAY API
+const updateImage = async ()=> {
+    const request = await fetch('/pix')
     try {
-        //get results
-        const newData = await response.json()
-        // update DOM with the results
-        document.getElementById('results').innerHTML = JSON.stringify(newData)
-        return newData
+        const pixabayData = await request.json()
+        
     } catch(error) {
-        console.log("Error: " + error)
+        console.log("error", error)
+    }
+} */
+
+let pixURL1 = 'https://pixabay.com/api/?key=16556677-f422a39b53b1100a4cbef14e0&q='
+let pixURL2 = '&image_type=photo&pretty=true&category=places'
+
+const pixData = async (pixURL1, location, pixURL2)=> {
+    const response = await fetch(pixURL1 + location + pixURL2)
+    try {
+        const data = await response.json()
+        console.log(data.hits[0].webformatURL)
+        const div = document.createElement('div')
+        //div.className = 'pixImage'
+        div.innerHTML = '<img class="pixImage" src=' + data.hits[0].webformatURL + '>'
+        document.getElementById('resultsImg').appendChild(div);
+        return data
+    } catch(error) {
+        console.log("error: ", error)
     }
 }
-
-export { handleSubmit }

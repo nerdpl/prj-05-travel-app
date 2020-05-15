@@ -1,6 +1,3 @@
-// Setup empty JS object to act as endpoint for all routes
-// projectData = []
-
 // Require Express to run server and routes
 const express = require('express')
 
@@ -25,23 +22,18 @@ const port = 3000
 const server = app.listen(port, listening)
 function listening() {
     console.log(`running on localhost: ${port}`)
-};
-
-// GET route to send all the project data
-app.get('/all', sendData)
-function sendData (request, response) {
-    response.send(projectData)
 }
 
-// POST route to get new entry from website
-app.post('/add', addData)
-function addData (request, response) {
-    newEntry = {
-        temperature: request.body.temperature,
-        date: request.body.date,
-        userResponse: request.body.userResponse
+// PIXABAY API
+let pixURL1 = 'https://pixabay.com/api/?key=16556677-f422a39b53b1100a4cbef14e0&q='
+let pixURL2 = '&image_type=photo&pretty=true&category=places'
+
+const pixData = async (pixURL1, location, pixURL2)=> {
+    const response = await fetch(pixURL1 + location + pixURL2)
+    try {
+        const data = await response.json()
+        return data
+    } catch(error) {
+        console.log("error: ", error)
     }
-    projectData.push(newEntry)
-    response.send(projectData)
-    console.log('Received data. New entry: ', newEntry)
-};
+}

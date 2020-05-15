@@ -64,3 +64,8 @@ h1 {
     color: white;
     cursor: pointer;
 }
+
+.pixImage {
+    max-width: 80%;
+    height: auto;
+}
