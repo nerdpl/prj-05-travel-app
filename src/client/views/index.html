@@ -3,14 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <title>Travel App</title>
-  <link rel="stylesheet" href="style.scss">
+  <link rel="stylesheet" type="text/css" href='../styles/style.css'>
 </head>
 <body>
   <div id="app">
-    <h1>Travel App</h1>
-  
-    <script src="app.js" type="text/javascript"></script>
-
+    <div class="box">
+      <h1>Travel App</h1>
+      <div class="text">Type in your data and press Go!</div>
+    </div>
+    <div class="box">
+      <form onsubmit="return Client.handleSubmit(event)">
+        <input id="input" size="30%" type="text" name="input" value="" placeholder="Where do you want to travel?"><BR>
+        <input id="submit" type="submit" name="" value="Go!" onclick="return Client.handleSubmit(event)" onsubmit="return handleSubmit(event)">
+      </form>
+    </div>
+    <div class="box">
+      <div id="results">Results go here</div>
+    </div>
+    <div class="box">
+      <div id="resultsImg">Results image goes here</div>
+    </div>
   </div>
+
+  <script src="app.js" type="text/javascript"></script>
+
 </body>
 </html>
