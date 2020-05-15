@@ -32,12 +32,22 @@ h1 {
     color: skyblue;
 }
 
-#input {
+#inputLocation {
     border: 1px solid navy;
     border-radius: 10px;
     width: 50%;
     padding: 10px;
     color: black;
+    font-family: 'Nunito', sans-serif;
+}
+
+#inputDate {
+    border: 1px solid navy;
+    border-radius: 10px;
+    width: 35%;
+    padding: 10px;
+    color: black;
+    font-family: 'Nunito', sans-serif;
 }
 
 #submit {
@@ -46,6 +56,7 @@ h1 {
     width: 20%;
     padding: 10px;
     color: black;
+    font-family: 'Nunito', sans-serif;
 }
 
 #submit:hover {
