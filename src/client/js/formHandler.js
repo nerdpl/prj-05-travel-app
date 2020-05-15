@@ -25,11 +25,7 @@ const pixData = async (pixURL1, location, pixURL2)=> {
     const response = await fetch(pixURL1 + location + pixURL2)
     try {
         const data = await response.json()
-        console.log(data.hits[0].webformatURL)
-        const div = document.createElement('div')
-        //div.className = 'pixImage'
-        div.innerHTML = '<img class="pixImage" src=' + data.hits[0].webformatURL + '>'
-        document.getElementById('resultsImg').appendChild(div);
+        document.getElementById('resultsImg').innerHTML = '<img class="pixImage" src=' + data.hits[0].webformatURL + '>'
         return data
     } catch(error) {
         console.log("error: ", error)
