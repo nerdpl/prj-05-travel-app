@@ -1,24 +1,33 @@
+// Global variables
+let allData = []
+let newEntry = {
+    placeName: '',
+    date: '',
+    lat: '',
+    lng: '',
+    weather: '',
+    maxTemp: '',
+    lowTemp: ''
+}
+
 function handleSubmit(event) {
     event.preventDefault()
     // check what text was put into the form field
     let userLocation = document.getElementById('inputLocation').value
     let userDate = document.getElementById('inputDate').value
+    newEntry.placeName = userLocation
+    newEntry.date = userDate
     console.log(userDate, userLocation)
     pixData(pixURL1, userLocation, pixURL2)
     geoData(geoURL1, userLocation, geoURL2)
+    .then (()=> {
+        weatherData(weatherURL1, lat, weatherURL2, lng, weatherURL3)
+    })
+    .then (()=> {
+        updateDOM()
+    })
     
 }
- 
-/* Get image from PIXABAY API
-const updateImage = async ()=> {
-    const request = await fetch('/pix')
-    try {
-        const pixabayData = await request.json()
-        
-    } catch(error) {
-        console.log("error", error)
-    }
-} */
 
 const pixURL1 = 'https://pixabay.com/api/?key=16556677-f422a39b53b1100a4cbef14e0&q='
 const pixURL2 = '&image_type=photo&pretty=true&category=places&orientation=horizontal'
@@ -30,20 +39,50 @@ const pixData = async (pixURL1, location, pixURL2)=> {
         document.getElementById('resultsImg').innerHTML = '<img class="pixImage" src=' + data.hits[0].webformatURL + '>'
         return data
     } catch(error) {
-        console.log("error: ", error)
+        console.log('error: ', error)
     }
 }
 
 const geoURL1 = 'http://api.geonames.org/postalCodeSearchJSON?placename='
 const geoURL2 = '&username=nerdpl'
+let lat = 0
+let lng = 0
 
 const geoData = async (geoURL1, location, geoURL2)=> {
     const response = await fetch(geoURL1 + location + geoURL2)
     try {
         const data = await response.json()
-        console.log(data.postalCodes[0].postalCode)
+        lat = data.postalCodes[0].lat
+        lng = data.postalCodes[0].lng
+        newEntry.lat = lat
+        newEntry.lng = lng
         return data
     } catch(error) {
         console.log("error: ", error)
+        document.getElementById('errorMSG').innerHTML = 'This location doesn\'t seem to exist'
+        setTimeout(()=> {
+            document.getElementById('errorMSG').innerHTML = ''
+        }, 3000)
     }
+}
+
+const weatherURL1 = 'https://api.weatherbit.io/v2.0/forecast/daily?lat='
+const weatherURL2 = '&lon='
+const weatherURL3 = '&key=9577e977cbd54849bc66696ec9ef97df'
+
+const weatherData = async (weatherURL1, lat, weatherURL2, lng, weatherURL3)=> {
+    const response = await fetch(weatherURL1 + lat + weatherURL2 + lng + weatherURL3)
+    try {
+        const data = await response.json()
+        newEntry.weather = data.data[0].weather.description
+        newEntry.lowTemp = data.data[0].low_temp
+        newEntry.maxTemp = data.data[0].max_temp
+        return data
+    } catch(error) {
+        console.log('error: ', error)
+    }
+}
+
+function updateDOM() {
+    console.log(newEntry)
 }
