@@ -17,16 +17,17 @@ function handleSubmit(event) {
     let userDate = document.getElementById('inputDate').value
     newEntry.placeName = userLocation
     newEntry.date = userDate
-    console.log(userDate, userLocation)
+    let todayDate = new Date()
+    let tripDate = new Date(userDate)
+    let days = tripDate.getDate() - todayDate.getDate()
     pixData(pixURL1, userLocation, pixURL2)
     geoData(geoURL1, userLocation, geoURL2)
     .then (()=> {
-        weatherData(weatherURL1, lat, weatherURL2, lng, weatherURL3)
+        weatherData(weatherURL1, lat, weatherURL2, lng, weatherURL3, days)
     })
     .then (()=> {
         updateDOM()
     })
-    
 }
 
 const pixURL1 = 'https://pixabay.com/api/?key=16556677-f422a39b53b1100a4cbef14e0&q='
@@ -70,13 +71,13 @@ const weatherURL1 = 'https://api.weatherbit.io/v2.0/forecast/daily?lat='
 const weatherURL2 = '&lon='
 const weatherURL3 = '&key=9577e977cbd54849bc66696ec9ef97df'
 
-const weatherData = async (weatherURL1, lat, weatherURL2, lng, weatherURL3)=> {
+const weatherData = async (weatherURL1, lat, weatherURL2, lng, weatherURL3, days)=> {
     const response = await fetch(weatherURL1 + lat + weatherURL2 + lng + weatherURL3)
     try {
         const data = await response.json()
-        newEntry.weather = data.data[0].weather.description
-        newEntry.lowTemp = data.data[0].low_temp
-        newEntry.maxTemp = data.data[0].max_temp
+        newEntry.weather = data.data[days].weather.description
+        newEntry.lowTemp = data.data[days].low_temp
+        newEntry.maxTemp = data.data[days].max_temp
         return data
     } catch(error) {
         console.log('error: ', error)
