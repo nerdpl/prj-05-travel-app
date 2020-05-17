@@ -19,7 +19,18 @@ function handleSubmit(event) {
     newEntry.date = userDate
     let todayDate = new Date()
     let tripDate = new Date(userDate)
-    let days = tripDate.getDate() - todayDate.getDate()
+    console.log(todayDate)
+    tripDate.setHours(todayDate.getHours())
+    tripDate.setMinutes(todayDate.getMinutes())
+    tripDate.setSeconds(todayDate.getSeconds())
+    tripDate.setMilliseconds(todayDate.getMilliseconds())
+    let days = (tripDate.getTime() - todayDate.getTime()) / (1000 * 60 * 60 * 24)
+    if (days > 15) {
+        document.getElementById('errorMSG').innerHTML = 'Sorry, weather forecast is only available for the next 15 days'
+        setTimeout(()=> {
+            document.getElementById('errorMSG').innerHTML = ''
+        }, 3000)
+    }
     pixData(pixURL1, userLocation, pixURL2)
     geoData(geoURL1, userLocation, geoURL2)
     .then (()=> {
@@ -84,6 +95,12 @@ const weatherData = async (weatherURL1, lat, weatherURL2, lng, weatherURL3, days
     }
 }
 
-function updateDOM() {
+const updateDOM = async()=> {
     console.log(newEntry)
+    document.getElementById('results').innerHTML = '<h2>Results:</h2><BR>Place: ' + newEntry.placeName 
+        + '<BR>Date: ' + newEntry.date 
+        + '<BR>Weather: ' + newEntry.weather 
+        + '<BR>Maximum temp: ' + newEntry.maxTemp 
+        + ' C<BR>Lowest temp: ' + newEntry.lowTemp + ' C'
+    
 }

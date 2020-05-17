@@ -28,7 +28,7 @@ body {
     font-family: 'Nunito', sans-serif;
 }
 
-h1 {
+h1, h2 {
     color: skyblue;
 }
 
@@ -68,4 +68,16 @@ h1 {
 .pixImage {
     max-width: 80%;
     height: auto;
+}
+
+#results {
+    font-size: smaller;
+    font-family: 'Nunito', sans-serif;
+}
+
+#errorMSG {
+    font-size: smaller;
+    color: red;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 500;
 }

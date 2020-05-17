@@ -9,17 +9,18 @@
   <div id="app">
     <div class="box">
       <h1>Travel App</h1>
-      <div class="text">Type in where do you wanna go and when does your adventure starts.</div>
+      <div class="text">Type in where do you wanna go and when does your adventure start.</div>
     </div>
     <div class="box">
       <form onsubmit="return handleSubmit(event)">
         <input id="inputLocation" type="text" name="location" value="" placeholder="Where do you want to travel?"><BR>
         <input id="inputDate" type="date" name="date" value=""><BR><BR>
         <input id="submit" type="submit" name="" value="Go!" onclick="return handleSubmit(event)" onsubmit="return handleSubmit(event)">
+        <div id="errorMSG"></div>
       </form>
     </div>
     <div class="box">
-      <div id="errorMSG"></div>
+      <div id="results"></div>
     </div>
     <div class="box">
       <div id="resultsImg"></div>
