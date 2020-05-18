@@ -1,72 +1,114 @@
+// Global variables
+let newEntry = {
+    placeName: '',
+    date: '',
+    lat: '',
+    lng: '',
+    weather: '',
+    maxTemp: '',
+    lowTemp: ''
+}
 
-/* Global Variables */
-let baseURL = 'https://api.openweathermap.org/data/2.5/weather?zip=';
-let apiKey = ',us&units=imperial&appid=8bc05df06f99dd61353e5f354f56fa01';
-
-// Create a new date instance dynamically with JS
-let d = new Date();
-let newDate = (d.getMonth()+1)+'.'+ d.getDate()+'.'+ d.getFullYear();
-
-// adding an event listener on the 'generate' button
-document.getElementById('generate').addEventListener('click', performAction);
-
-// Setting the action for the button 'generate'
-function performAction(e) {
-    const userResponse = document.getElementById('feelings').value;
-    const zipCode = document.getElementById('zip').value;
-    // get data from weather API
-    postApiData(baseURL, zipCode, apiKey)
-    // waiting for the data and then sending it to our server project data
-    .then ((apiData)=> {
-        return postData('/add', {
-            temperature: apiData.main.temp,
-            date: newDate,
-            userResponse: userResponse
-        });
-    })
-    // updating our page with latest data
+function handleSubmit(event) {
+    event.preventDefault()
+    // check what text was put into the form field
+    let userLocation = document.getElementById('inputLocation').value
+    let userDate = document.getElementById('inputDate').value
+    newEntry.placeName = userLocation
+    newEntry.date = userDate
+    // calculate number of days to get weather
+    let todayDate = new Date()
+    let tripDate = new Date(userDate)
+    // set the same time to get the result in full days
+    tripDate.setHours(todayDate.getHours())
+    tripDate.setMinutes(todayDate.getMinutes())
+    tripDate.setSeconds(todayDate.getSeconds())
+    tripDate.setMilliseconds(todayDate.getMilliseconds())
+    let days = (tripDate.getTime() - todayDate.getTime()) / (1000 * 60 * 60 * 24)
+    // if date of the trip is more than 15 days away display error
+    if (days > 15) {
+        document.getElementById('errorMSG').innerHTML = 'Sorry, weather forecast is only available for the next 15 days'
+        setTimeout(()=> {
+            document.getElementById('errorMSG').innerHTML = ''
+        }, 3000)
+    }
+    // get the photo of the location and update DOM with it
+    pixData(pixURL1, userLocation, pixURL2)
+    // get the coordinates for the location
+    geoData(geoURL1, userLocation, geoURL2)
     .then (()=> {
-        updatePage()
-    });
-};
-
-// Setting the POST route to get weather API data
-const postApiData = async (baseURL, zip, apiKey)=> {
-    const response = await fetch(baseURL + zip + apiKey)
-    try {
-        const data = await response.json();
-        return data;
-    } catch(error) {
-        console.log("error", error);
-    };
-};
-
-// Setting the POST route to our server
-const postData = async (url = '', data = {})=> {
-    const response = await fetch(url, {
-        method: 'POST', 
-        credentials: 'same-origin',
-        headers: {'Content-Type': 'application/json',},
-        body: JSON.stringify(data) 
+        //get the weather from previously received coordinates
+        weatherData(weatherURL1, newEntry.lat, weatherURL2, newEntry.lng, weatherURL3, days)
+        .then (()=> {
+            // update DOM with the weather results
+            updateDOM()
+        })
     })
-    try {
-        const newData = await response.json();
-        return newData;
-    } catch(error) {
-        console.log("error: " + error);
-    };
-};
+}
 
-// updating our page with latest entry
-const updatePage = async ()=> {
-    const request = await fetch('/all');
+// PIXABAY API credentials
+const pixURL1 = 'https://pixabay.com/api/?key=16556677-f422a39b53b1100a4cbef14e0&q='
+const pixURL2 = '&image_type=photo&pretty=true&category=places&orientation=horizontal'
+
+// Get the photo of the typed in location and update the DOM with it
+const pixData = async (pixURL1, location, pixURL2)=> {
+    const response = await fetch(pixURL1 + location + pixURL2)
     try {
-        const projectData = await request.json();
-        const i = projectData.length-1;
-        document.getElementById('date').innerHTML = projectData[i].date;
-        document.getElementById('temp').innerHTML = projectData[i].temperature;
-        document.getElementById('content').innerHTML = projectData[i].userResponse;
+        const data = await response.json()
+        document.getElementById('resultsImg').innerHTML = '<img class="pixImage" src=' + data.hits[0].webformatURL + '>'
+        return data
     } catch(error) {
-        console.log("error", error);
-    };
-};
+        console.log('error: ', error)
+    }
+}
+
+// GEONAMES API credentials
+const geoURL1 = 'http://api.geonames.org/postalCodeSearchJSON?placename='
+const geoURL2 = '&username=nerdpl'
+
+// get user's location latitude and longitude from GEONAMES
+const geoData = async (geoURL1, location, geoURL2)=> {
+    const response = await fetch(geoURL1 + location + geoURL2)
+    try {
+        const data = await response.json()
+        newEntry.lat = data.postalCodes[0].lat
+        newEntry.lng = data.postalCodes[0].lng
+        return data
+    } catch(error) {
+        console.log("error: ", error)
+        document.getElementById('errorMSG').innerHTML = 'This location doesn\'t seem to exist'
+        setTimeout(()=> {
+            document.getElementById('errorMSG').innerHTML = ''
+        }, 3000)
+    }
+}
+
+// WEATHERBIT API credentials
+const weatherURL1 = 'https://api.weatherbit.io/v2.0/forecast/daily?lat='
+const weatherURL2 = '&lon='
+const weatherURL3 = '&key=9577e977cbd54849bc66696ec9ef97df'
+
+// send latitude and longitude and receive weather for 16 days
+const weatherData = async (weatherURL1, lat, weatherURL2, lng, weatherURL3, days)=> {
+    const response = await fetch(weatherURL1 + lat + weatherURL2 + lng + weatherURL3)
+    try {
+        const data = await response.json()
+        // use calculated number of days to access desired part of the response
+        newEntry.weather = data.data[days].weather.description
+        newEntry.lowTemp = data.data[days].low_temp
+        newEntry.maxTemp = data.data[days].max_temp
+        return data
+    } catch(error) {
+        console.log('error: ', error)
+    }
+}
+
+// update DOM with all the results
+const updateDOM = ()=> {
+    document.getElementById('results').innerHTML = '<h2>Results:</h2>Place: ' + newEntry.placeName.toUpperCase() 
+        + '<BR>Date: ' + newEntry.date 
+        + '<BR>Weather: ' + newEntry.weather 
+        + '<BR>Maximum temp: ' + newEntry.maxTemp 
+        + ' C<BR>Lowest temp: ' + newEntry.lowTemp + ' C'
+    
+}

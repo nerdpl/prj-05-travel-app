@@ -36,7 +36,7 @@ h1, h2 {
     border: 1px solid navy;
     border-radius: 10px;
     width: 50%;
-    padding: 5px;
+    padding: 10px;
     color: black;
     font-family: 'Nunito', sans-serif;
 }
@@ -44,8 +44,8 @@ h1, h2 {
 #inputDate {
     border: 1px solid navy;
     border-radius: 10px;
-    width: 35%;
-    padding: 5px;
+    width: 45%;
+    padding: 10px;
     color: black;
     font-family: 'Nunito', sans-serif;
 }
