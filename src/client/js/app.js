@@ -9,6 +9,7 @@ let newEntry = {
     lowTemp: ''
 }
 
+// main function
 function handleSubmit(event) {
     event.preventDefault()
     // check what text was put into the form field
@@ -55,7 +56,7 @@ const pixData = async (pixURL1, location, pixURL2)=> {
     const response = await fetch(pixURL1 + location + pixURL2)
     try {
         const data = await response.json()
-        document.getElementById('resultsImg').innerHTML = '<img class="pixImage" src=' + data.hits[0].webformatURL + '>'
+        document.getElementById('resultsImg').innerHTML = '<img id="pixImage" src=' + data.hits[0].webformatURL + '>'
         return data
     } catch(error) {
         console.log('error: ', error)
@@ -112,3 +113,5 @@ const updateDOM = ()=> {
         + ' C<BR>Lowest temp: ' + newEntry.lowTemp + ' C'
     
 }
+
+export { handleSubmit }

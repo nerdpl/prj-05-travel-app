@@ -23,17 +23,3 @@ const server = app.listen(port, listening)
 function listening() {
     console.log(`running on localhost: ${port}`)
 }
-
-// PIXABAY API
-let pixURL1 = 'https://pixabay.com/api/?key=16556677-f422a39b53b1100a4cbef14e0&q='
-let pixURL2 = '&image_type=photo&pretty=true&category=places'
-
-const pixData = async (pixURL1, location, pixURL2)=> {
-    const response = await fetch(pixURL1 + location + pixURL2)
-    try {
-        const data = await response.json()
-        return data
-    } catch(error) {
-        console.log("error: ", error)
-    }
-}
