@@ -37,6 +37,8 @@ webpack.prod.js
 
 ## Installation
 
+To access built version of the app run dist\index.html
+
 You need to setup webpack with all the loaders and plugins from the package.json file.
 - npm start
 to start the server
