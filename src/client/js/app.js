@@ -1,4 +1,6 @@
 // Global variables
+const dotenv = require('dotenv')
+dotenv.config()
 let newEntry = {
     placeName: '',
     date: '',
@@ -34,7 +36,7 @@ function handleSubmit(event) {
         }, 3000)
     }
     // get the photo of the location and update DOM with it
-    pixData(pixURL1, userLocation, pixURL2)
+    pixData(pixURL1, pixURL2, userLocation, pixURL3)
     // get the coordinates for the location
     geoData(geoURL1, userLocation, geoURL2)
     .then (()=> {
@@ -48,12 +50,13 @@ function handleSubmit(event) {
 }
 
 // PIXABAY API credentials
-const pixURL1 = 'https://pixabay.com/api/?key=16556677-f422a39b53b1100a4cbef14e0&q='
-const pixURL2 = '&image_type=photo&pretty=true&category=places&orientation=horizontal'
+const pixURL1 = 'https://pixabay.com/api/?key='
+const pixURL2 = '&q='
+const pixURL3 = '&image_type=photo&pretty=true&category=places&orientation=horizontal'
 
 // Get the photo of the typed in location and update the DOM with it
-const pixData = async (pixURL1, location, pixURL2)=> {
-    const response = await fetch(pixURL1 + location + pixURL2)
+const pixData = async (pixURL1, pixURL2, location, pixURL3)=> {
+    const response = await fetch(pixURL1 + process.env.API_KEY_PIXABAY + pixURL2 + location + pixURL3)
     try {
         const data = await response.json()
         document.getElementById('resultsImg').innerHTML = '<img id="pixImage" src=' + data.hits[0].webformatURL + '>'
@@ -65,11 +68,11 @@ const pixData = async (pixURL1, location, pixURL2)=> {
 
 // GEONAMES API credentials
 const geoURL1 = 'http://api.geonames.org/postalCodeSearchJSON?placename='
-const geoURL2 = '&username=nerdpl'
+const geoURL2 = '&username='
 
 // get user's location latitude and longitude from GEONAMES
 const geoData = async (geoURL1, location, geoURL2)=> {
-    const response = await fetch(geoURL1 + location + geoURL2)
+    const response = await fetch(geoURL1 + location + geoURL2 + process.env.API_ID_GEONAMES)
     try {
         const data = await response.json()
         newEntry.lat = data.postalCodes[0].lat
@@ -87,11 +90,11 @@ const geoData = async (geoURL1, location, geoURL2)=> {
 // WEATHERBIT API credentials
 const weatherURL1 = 'https://api.weatherbit.io/v2.0/forecast/daily?lat='
 const weatherURL2 = '&lon='
-const weatherURL3 = '&key=9577e977cbd54849bc66696ec9ef97df'
+const weatherURL3 = '&key='
 
 // send latitude and longitude and receive weather for 16 days
 const weatherData = async (weatherURL1, lat, weatherURL2, lng, weatherURL3, days)=> {
-    const response = await fetch(weatherURL1 + lat + weatherURL2 + lng + weatherURL3)
+    const response = await fetch(weatherURL1 + lat + weatherURL2 + lng + weatherURL3 + process.env.API_KEY_WEATHERBIT)
     try {
         const data = await response.json()
         // use calculated number of days to access desired part of the response
