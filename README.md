@@ -4,6 +4,7 @@
 
 * [Project Info](#project_info)
 * [List of files](#list_of_files)
+* [Installation](#installation)
 * [Functions](#functions)
 
 ## Project_Info
@@ -33,6 +34,16 @@ process.env
 README.md
 webpack.dev.js
 webpack.prod.js
+
+## Installation
+
+You need to setup webpack with all the loaders and plugins from the package.json file.
+- npm start
+to start the server
+- npm run build-dev
+to run developement webpack configuration
+- npm run build-prod
+to run production webpack configuration and build the website in the 'dist' folder 
 
 ## Functions
 
