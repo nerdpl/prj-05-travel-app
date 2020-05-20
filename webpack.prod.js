@@ -7,6 +7,9 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 
 module.exports = {
+    node: {
+        fs: "empty"
+    },
     entry: './src/client/index.js',
     output: {
         libraryTarget: 'var',

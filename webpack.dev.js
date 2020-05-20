@@ -4,6 +4,9 @@ const HtmlWebPackPlugin = require("html-webpack-plugin")
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = {
+    node: {
+        fs: "empty"
+    },
     entry: './src/client/index.js',
     output: {
         libraryTarget: 'var',
