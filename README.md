@@ -47,10 +47,10 @@ to run developement webpack configuration
 - npm run build-prod
 to run production webpack configuration and build the website in the 'dist' folder
 
-In order to access APIs you need to include process.env file with following credentials:
-- API_KEY_PIXABAY='xxx'
-- API_ID_GEONAMES='xxx'
-- API_KEY_WEATHERBIT='xxx' 
+In order to access APIs you need to include .env file with following credentials:
+- API_KEY_PIXABAY=
+- API_ID_GEONAMES=
+- API_KEY_WEATHERBIT=
 
 ## Functions
 

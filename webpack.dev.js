@@ -1,11 +1,12 @@
 const path = require('path')
 const webpack = require('webpack')
-const HtmlWebPackPlugin = require("html-webpack-plugin")
+const HtmlWebPackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const Dotenv = require('dotenv-webpack')
 
 module.exports = {
     node: {
-        fs: "empty"
+        fs: 'empty'
     },
     entry: './src/client/index.js',
     output: {
@@ -20,7 +21,7 @@ module.exports = {
             {
                 test: '/\.js$/',
                 exclude: /node_modules/,
-                loader: "babel-loader"
+                loader: 'babel-loader'
             },
             {
                 test: /\.scss$/,
@@ -30,8 +31,8 @@ module.exports = {
     },
     plugins: [
         new HtmlWebPackPlugin({
-            template: "./src/client/views/index.html",
-            filename: "./index.html",
+            template: './src/client/views/index.html',
+            filename: './index.html'
         }),
         new CleanWebpackPlugin({
             // Simulate the removal of files
@@ -41,6 +42,9 @@ module.exports = {
             // Automatically remove all unused webpack assets on rebuild
             cleanStaleWebpackAssets: true,
             protectWebpackAssets: false
+        }),
+        new Dotenv({
+            path: path.resolve(__dirname, '.env')
         })
     ]
 }

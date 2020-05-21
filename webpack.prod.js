@@ -5,10 +5,11 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
+const Dotenv = require('dotenv-webpack')
 
 module.exports = {
     node: {
-        fs: "empty"
+        fs: 'empty'
     },
     entry: './src/client/index.js',
     output: {
@@ -25,7 +26,7 @@ module.exports = {
             {
                 test: '/\.js$/',
                 exclude: /node_modules/,
-                loader: "babel-loader"
+                loader: 'babel-loader'
             },
             {
                 test: /\.scss$/,
@@ -35,10 +36,13 @@ module.exports = {
     },
     plugins: [
         new HtmlWebPackPlugin({
-            template: "./src/client/views/index.html",
-            filename: "./index.html",
+            template: './src/client/views/index.html',
+            filename: './index.html',
         }),
         new MiniCssExtractPlugin({filename: '[name].css'}),
-        new WorkboxPlugin.GenerateSW()
+        new WorkboxPlugin.GenerateSW(),
+        new Dotenv({
+            path: path.resolve(__dirname, '.env')
+        })
     ]
 }
