@@ -38,7 +38,9 @@ app.post('/add', addData)
 function addData (request, response) {
     newEntry = {
         placeName: request.body.placeName,
-        date: request.body.date,
+        dateFrom: request.body.dateFrom,
+        dateTo: request.body.dateTo,
+        length: request.body.length,
         lat: request.body.lat,
         lng: request.body.lng,
         weather: request.body.weather,

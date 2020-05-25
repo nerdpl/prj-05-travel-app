@@ -3,7 +3,9 @@ const dotenv = require('dotenv')
 dotenv.config()
 let newEntry = {
     placeName: '',
-    date: '',
+    dateFrom: '',
+    dateTo: '',
+    length: '',
     lat: '',
     lng: '',
     weather: '',
@@ -17,17 +19,25 @@ function handleSubmit(event) {
     // check what text was put into the form field
     let userLocation = document.getElementById('inputLocation').value
     let userDate = document.getElementById('inputDate').value
+    let userDateTo = document.getElementById('inputDateTo').value
     newEntry.placeName = userLocation
-    newEntry.date = userDate
+    newEntry.dateFrom = userDate
+    newEntry.dateTo = userDateTo
     // calculate number of days to get weather
     let todayDate = new Date()
     let tripDate = new Date(userDate)
+    let tripDateTo = new Date(userDateTo)
     // set the same time to get the result in full days
     tripDate.setHours(todayDate.getHours())
     tripDate.setMinutes(todayDate.getMinutes())
     tripDate.setSeconds(todayDate.getSeconds())
     tripDate.setMilliseconds(todayDate.getMilliseconds())
+    tripDateTo.setHours(todayDate.getHours())
+    tripDateTo.setMinutes(todayDate.getMinutes())
+    tripDateTo.setSeconds(todayDate.getSeconds())
+    tripDateTo.setMilliseconds(todayDate.getMilliseconds())
     let days = (tripDate.getTime() - todayDate.getTime()) / (1000 * 60 * 60 * 24)
+    newEntry.length = ((tripDateTo.getTime() - tripDate.getTime()) / (1000 * 60 * 60 * 24)) + 1
     // if date of the trip is more than 15 days away display error
     if (days > 15) {
         document.getElementById('errorMSG').innerHTML = 'Sorry, weather forecast is only available for the next 15 days'
@@ -133,10 +143,12 @@ const updateDOM = async ()=> {
         const projectData = await request.json()
         const i = projectData.length-1
         document.getElementById('results').innerHTML = '<h2>Results:</h2>Place: ' + projectData[i].placeName.toUpperCase() 
-            + '<BR>Date: ' + projectData[i].date
+            + '<BR>Date from: ' + projectData[i].dateFrom
+            + '<BR>Date to: ' + projectData[i].dateTo
+            + '<BR>Trip length: ' + projectData[i].length + ' days'
             + '<BR>Weather: ' + projectData[i].weather 
-            + '<BR>Maximum temp: ' + projectData[i].maxTemp
-            + ' C<BR>Lowest temp: ' + projectData[i].lowTemp + ' C'
+            + '<BR>Maximum temp: ' + projectData[i].maxTemp + ' C'
+            + '<BR>Lowest temp: ' + projectData[i].lowTemp + ' C'
     } catch(error) {
         console.log("error", error)
     }

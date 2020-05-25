@@ -2,10 +2,11 @@
 
 ## Table of Contents
 
-* [Project Info](#project_info)
+* [Project info](#project_info)
 * [List of files](#list_of_files)
 * [Installation](#installation)
 * [Functions](#functions)
+* [Additional functionality](#additional_functionality)
 
 ## Project_Info
 
@@ -47,7 +48,7 @@ to run developement webpack configuration
 - npm run build-prod
 to run production webpack configuration and build the website in the 'dist' folder
 
-In order to access APIs you need to include .env file with following credentials:
+In order to access APIs you need to include .env file in the main folder with following credentials:
 - API_KEY_PIXABAY=
 - API_ID_GEONAMES=
 - API_KEY_WEATHERBIT=
@@ -56,6 +57,10 @@ In order to access APIs you need to include .env file with following credentials
 
 Server side (src\server\server.js)
 - Setup express server, body parser and cors.
+- sendData()
+    Setup a route to send all the project data.
+- addData()
+    Setup a route to receive new data entry and store it in an array.
 
 Client side (src\client\js\app.js)
 - handleSubmit()
@@ -66,5 +71,11 @@ Client side (src\client\js\app.js)
     Fetches the latitude and longitude coordinates for the user specified place of the trip.
 - weatherData()
     Fetches the weather for today and next 15 days for the coordinates from the previous API.
+- postData()
+    Sends all the project data to the server.
 - updateDOM()
-    Updates the DOM with the weather results.
+    Downloads the latest data from the server and updates the DOM with it.
+
+## Additional_Functionality
+
+- Added second date field in the form. The app now also returns the length of the trip in days.
