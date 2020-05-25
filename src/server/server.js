@@ -1,3 +1,6 @@
+// Setup empty JS object to act as endpoint for all routes
+projectData = []
+
 // Require Express to run server and routes
 const express = require('express')
 
@@ -22,4 +25,26 @@ const port = 3000
 const server = app.listen(port, listening)
 function listening() {
     console.log(`running on localhost: ${port}`)
+}
+
+// GET route to send all the project data
+app.get('/all', sendData)
+function sendData (request, response) {
+    response.send(projectData)
+}
+
+// POST route to get new entry from website
+app.post('/add', addData)
+function addData (request, response) {
+    newEntry = {
+        placeName: request.body.placeName,
+        date: request.body.date,
+        lat: request.body.lat,
+        lng: request.body.lng,
+        weather: request.body.weather,
+        maxTemp: request.body.maxTemp,
+        lowTemp: request.body.lowTemp
+    }
+    projectData.push(newEntry)
+    response.send(projectData)
 }

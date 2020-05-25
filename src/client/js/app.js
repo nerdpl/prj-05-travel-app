@@ -43,8 +43,11 @@ function handleSubmit(event) {
         //get the weather from previously received coordinates
         weatherData(weatherURL1, newEntry.lat, weatherURL2, newEntry.lng, weatherURL3, days)
         .then (()=> {
-            // update DOM with the weather results
-            updateDOM()
+            // Send data to the server
+            postData('/add', newEntry)
+            .then (()=> {
+                updateDOM()
+            })
         })
     })
 }
@@ -107,14 +110,36 @@ const weatherData = async (weatherURL1, lat, weatherURL2, lng, weatherURL3, days
     }
 }
 
-// update DOM with all the results
-const updateDOM = ()=> {
-    document.getElementById('results').innerHTML = '<h2>Results:</h2>Place: ' + newEntry.placeName.toUpperCase() 
-        + '<BR>Date: ' + newEntry.date 
-        + '<BR>Weather: ' + newEntry.weather 
-        + '<BR>Maximum temp: ' + newEntry.maxTemp 
-        + ' C<BR>Lowest temp: ' + newEntry.lowTemp + ' C'
-    
+// Setting the POST route to our server
+const postData = async (url = '', data = {})=> {
+    const response = await fetch(url, {
+        method: 'POST', 
+        credentials: 'same-origin',
+        headers: {'Content-Type': 'application/json',},
+        body: JSON.stringify(data) 
+    })
+    try {
+        const newData = await response.json()
+        return newData
+    } catch(error) {
+        console.log("error: " + error)
+    }
+}
+
+// get latest data from server and update DOM
+const updateDOM = async ()=> {
+    const request = await fetch('/all')
+    try {
+        const projectData = await request.json()
+        const i = projectData.length-1
+        document.getElementById('results').innerHTML = '<h2>Results:</h2>Place: ' + projectData[i].placeName.toUpperCase() 
+            + '<BR>Date: ' + projectData[i].date
+            + '<BR>Weather: ' + projectData[i].weather 
+            + '<BR>Maximum temp: ' + projectData[i].maxTemp
+            + ' C<BR>Lowest temp: ' + projectData[i].lowTemp + ' C'
+    } catch(error) {
+        console.log("error", error)
+    }
 }
 
 export { handleSubmit }
