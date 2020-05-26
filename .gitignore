@@ -1,2 +1,7 @@
 node_modules
 .env
+src/client/js/.DS_Store
+src/client/.DS_Store
+.DS_Store
+src/client/.DS_Store
+.DS_Store
