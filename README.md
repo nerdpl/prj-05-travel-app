@@ -6,6 +6,7 @@
 * [List of files](#list_of_files)
 * [Installation](#installation)
 * [Functions](#functions)
+* [Tests](#tests)
 * [Additional functionality](#additional_functionality)
 
 ## Project_Info
@@ -75,6 +76,14 @@ Client side (src\client\js\app.js)
     Sends all the project data to the server.
 - updateDOM()
     Downloads the latest data from the server and updates the DOM with it.
+
+## Tests
+
+Server side (src\server\server.test.js)
+- Test if the express server works.
+
+Client side (src\client\js\app.test.js)
+- Test if Geonames API is online.
 
 ## Additional_Functionality
 
