@@ -50,3 +50,5 @@ function addData (request, response) {
     projectData.push(newEntry)
     response.send(projectData)
 }
+
+module.exports = app

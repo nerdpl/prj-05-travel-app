@@ -1,23 +1,11 @@
-const request = require('supertest')
-const express = require('express')
-const app = express()
+const app = require('./server.js')
+const supertest = require('supertest')
+const request = supertest(app)
 
-describe('Post Endpoints', () => {
-  it('should create a new post', async () => {
-    const res = await request(app)
-      .post('/add')
-      .send({
-        placeName: '',
-        dateFrom: '',
-        dateTo: '',
-        length: '',
-        lat: '',
-        lng: '',
-        weather: '',
-        maxTemp: '',
-        lowTemp: ''
-      })
-    expect(res.statusCode).toEqual(201)
-    expect(res.body).toHaveProperty('post')
-  })
+describe('Post endpoint', () => {
+    it('/all', async done => {
+        const response = await request.get('/all')
+        expect(response.status).toBe(200)
+        done()
+    })
 })
